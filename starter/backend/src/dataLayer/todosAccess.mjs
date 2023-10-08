@@ -72,22 +72,21 @@ export class TodosAccess {
     const putItemCommand = {
       TableName: this.todosTable,
       Key: {
-        userId: userId,
-        todoId: todoId
+          userId: userId,
+          todoId: todoId
       },
       UpdateExpression: 'SET #itemname = :itemname, dueDate = :dueDate, done = :done',
       ExpressionAttributeNames: {
-        '#itemname': 'name'
+          '#itemname': 'name'
       },
       ExpressionAttributeValues: {
-        ':itemname': updateTodo.name,
-        ':done': updateTodo.done,
-        ':dueDate': updateTodo.dueDate
-
+          ':itemname': updateTodo.name,
+          ':dueDate': updateTodo.dueDate,
+          ':done': updateTodo.done
       }
-    }
+  }
 
-    await this.dynamoDbClient.put(putItemCommand)
+    await this.dynamoDbClient.update(putItemCommand)
   }
 
   async updateTodoImageUrl(userId, todoId, imageUrl) {

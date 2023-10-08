@@ -15,14 +15,15 @@ export const handler = middy()
     console.log('Processing event: ', event)
 
     const userId = getUserId(event)
+    const todoId = event.pathParameters.todoId
     const parsedBody = JSON.parse(event.body)
 
-    const item = await updateTodo(userId, parsedBody)
+    const item = await updateTodo(userId, todoId, parsedBody)
 
     return {
       statusCode: 201,
       body: ''
     }
-    
+
   })
 
