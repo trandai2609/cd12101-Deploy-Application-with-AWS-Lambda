@@ -1,8 +1,29 @@
+import { createTodo } from "../../businessLogic/todos.mjs"
 
-export function handler(event) {
-  const newTodo = JSON.parse(event.body)
+import middy from '@middy/core'
+import cors from '@middy/http-cors'
 
-  // TODO: Implement creating a new TODO item
-  return undefined
-}
+import {getUserId} from '../utils.mjs'
+
+export const handler = middy()  
+  .use(
+    cors({
+      credentials: true
+    })
+  )
+  .handler(async (event) => {
+    console.log('Processing event: ', event)
+
+    const userId = getUserId(event)
+    const parsedBody = JSON.parse(event.body)
+
+    const item = await createTodo(userId, parsedBody)
+
+    return {
+      statusCode: 201,
+      body: JSON.stringify({
+        item
+      })
+    }
+  })
 
