@@ -1,4 +1,4 @@
-import {TodosAccess} from '../dataLayer/todosAccess.mjs'
+import { TodosAccess } from '../dataLayer/todosAccess.mjs'
 import * as uuid from 'uuid'
 
 const todosAccess = new TodosAccess()
@@ -20,6 +20,10 @@ export async function createTodo(userId, newTodo) {
         dueDate: newTodo.dueDate,
         done: false
     });
+}
+
+export async function updateTodo(userId, todoId, updateTodo) {
+    return todosAccess.updateTodo(userId, todoId, updateTodo);
 }
 
 export async function deleteTodo(userId, todoId) {
