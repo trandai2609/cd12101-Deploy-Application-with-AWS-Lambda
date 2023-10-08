@@ -72,22 +72,44 @@ export class TodosAccess {
     const putItemCommand = {
       TableName: this.todosTable,
       Key: {
-          userId: userId,
-          todoId: todoId
+        userId: userId,
+        todoId: todoId
       },
       UpdateExpression: 'SET #itemname = :itemname, dueDate = :dueDate, done = :done',
       ExpressionAttributeNames: {
-          '#itemname': 'name'
+        '#itemname': 'name'
       },
       ExpressionAttributeValues: {
-          ':itemname': updateTodo.name,
-          ':done': updateTodo.done,
-          ':dueDate': updateTodo.dueDate
-          
+        ':itemname': updateTodo.name,
+        ':done': updateTodo.done,
+        ':dueDate': updateTodo.dueDate
+
       }
-  }
+    }
 
     await this.dynamoDbClient.put(putItemCommand)
+  }
+
+  async updateTodoImageUrl(userId, todoId, imageUrl) {
+    const todoItem = await this.getTodoById(userId, todoId)
+
+    if (!todoItem) {
+      throw new Error(`Todo item ${todoId} not found`)
+    }
+
+    const updateImageCommnad = {
+      TableName: this.todosTable,
+      Key: {
+        userId: userId,
+        todoId: todoId
+      },
+      UpdateExpression: 'SET attachmentUrl = :attachmentUrl',
+      ExpressionAttributeValues: {
+        ':attachmentUrl': imageUrl
+      }
+    }
+
+    await this.dynamoDbClient.update(updateImageCommnad)
   }
 
   async deleteTodo(userId, todoId) {

@@ -2,6 +2,8 @@ import { TodosAccess } from '../dataLayer/todosAccess.mjs'
 import * as uuid from 'uuid'
 
 const todosAccess = new TodosAccess()
+const s3_bucket = process.env.ATTACHMENT_S3_BUCKET
+const AWS_REGION = process.env.AWS_REGION
 
 export async function getTodos(userId) {
     return todosAccess.getTodosForUser(userId)
@@ -24,6 +26,13 @@ export async function createTodo(userId, newTodo) {
 
 export async function updateTodo(userId, todoId, updateTodo) {
     return todosAccess.updateTodo(userId, todoId, updateTodo);
+}
+
+export async function updateTodoImageUrl (userId, todoId, imageId) {
+
+    const imageUrl  = `https://${s3_bucket}.s3.${AWS_REGION}.amazonaws.com/${imageId}`
+
+    return todosAccess.updateTodoImageUrl(userId, todoId, imageUrl)
 }
 
 export async function deleteTodo(userId, todoId) {
